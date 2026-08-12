@@ -1,6 +1,6 @@
 # 🚀 Prompt Engine
 
-A professional AI-powered prompt optimization engine that converts natural language (text or audio) into optimized, AI-friendly prompts. Perfect for fitness, finance, software engineering, and beyond.
+A professional AI-powered coding prompt optimization engine that converts software engineering requests into optimized, AI-friendly prompts.
 
 ## ✨ Features
 
@@ -77,16 +77,15 @@ prompt-engine/
    
    The app will open at `http://localhost:3000`
 
-### Backend Setup (Coming Next)
-Backend will be available in the `backend/` directory with Node.js and Express.
+### Backend Setup
+The backend is available in the `backend/` directory with Node.js and Express.
 
 ## 📖 How to Use
 
 1. **Text Input**: Type or paste your prompt in the left column
-2. **Audio Input**: Click the "Convert Audio" button to record your prompt
-3. **Optimize**: Click "⚡ Optimize Prompt" to send it to Grok
-4. **Copy**: Click the copy button to save the optimized prompt to clipboard
-5. **History**: All prompts are saved automatically to your database
+2. **Optimize**: Click "Optimize Prompt" to send it to the AI service
+3. **Copy**: Click the copy button to save the optimized prompt to clipboard
+4. **History**: All accepted prompts are saved automatically to your database
 
 ## 🔌 API Endpoints (Backend)
 

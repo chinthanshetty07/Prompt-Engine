@@ -3,7 +3,6 @@ import { usePrompt } from './context/PromptContext'
 import { optimizePrompt, getHistory } from './services/api'
 import { InputColumn } from './components/InputColumn'
 import { OutputColumn } from './components/OutputColumn'
-import { ConvertButton } from './components/ConvertButton'
 import './styles/layout.css'
 import './styles/App.css'
 
@@ -72,7 +71,6 @@ function App() {
           >
             Optimize Prompt
           </button>
-          <ConvertButton />
         </div>
       </main>
 

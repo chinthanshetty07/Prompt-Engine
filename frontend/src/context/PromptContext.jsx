@@ -8,8 +8,6 @@ export function PromptProvider({ children }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [history, setHistory] = useState([])
-  const [isRecording, setIsRecording] = useState(false)
-
   const value = {
     inputPrompt,
     setInputPrompt,
@@ -20,9 +18,7 @@ export function PromptProvider({ children }) {
     error,
     setError,
     history,
-    setHistory,
-    isRecording,
-    setIsRecording
+    setHistory
   }
 
   return (
