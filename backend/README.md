@@ -186,8 +186,6 @@ MONGODB_URI=mongodb://localhost:27017/prompt-engine
 GROK_API_KEY=your_key_here
 GROK_API_BASE_URL=https://api.x.ai/v1
 
-# Whisper API
-WHISPER_API_KEY=your_key_here
 
 # Frontend URL for CORS
 CORS_ORIGIN=http://localhost:3000

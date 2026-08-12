@@ -5,7 +5,6 @@ A professional AI-powered prompt optimization engine that converts natural langu
 ## ✨ Features
 
 - **Professional UI** - ChatGPT-like design with split-column layout
-- **Audio Input** - Speech-to-text conversion using Whisper API
 - **Smart Optimization** - Powered by Grok AI for intelligent prompt analysis
 - **Conversation History** - Save and manage all your prompts in MongoDB
 - **Dark Mode** - Beautiful light and dark theme support
@@ -23,7 +22,6 @@ A professional AI-powered prompt optimization engine that converts natural langu
 - Node.js + Express
 - MongoDB for data persistence
 - Grok API integration
-- Whisper API for speech-to-text
 
 ## 📋 Project Structure
 
@@ -107,7 +105,6 @@ DELETE /api/history/:id
 
 - **InputColumn** - Text input area with character counter
 - **OutputColumn** - Displays optimized prompts with copy functionality
-- **ConvertButton** - Audio recording with Whisper integration
 - **App** - Main component that orchestrates the flow
 
 ## 🔐 Environment Variables
@@ -122,7 +119,6 @@ REACT_APP_API_URL=http://localhost:5000
 PORT=5000
 MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/prompt-engine
 GROK_API_KEY=your_grok_api_key
-WHISPER_API_KEY=your_whisper_api_key
 NODE_ENV=development
 ```
 
@@ -131,10 +127,9 @@ NODE_ENV=development
 - [x] Phase 1: Frontend UI
 - [ ] Phase 2: Backend Setup
 - [ ] Phase 3: API Integration
-- [ ] Phase 4: Whisper Integration
-- [ ] Phase 5: Grok Integration
-- [ ] Phase 6: Polish & Features
-- [ ] Phase 7: Testing & Deployment
+- [ ] Phase 4: Grok Integration
+- [ ] Phase 5: Polish & Features
+- [ ] Phase 6: Testing & Deployment
 
 ## 🤝 Contributing
 
