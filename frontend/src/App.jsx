@@ -55,7 +55,7 @@ function App() {
       <header className="app-header">
         <div className="header-content">
           <h1>Prompt Engine</h1>
-          <p>Optimize your prompts with AI intelligence</p>
+          <p>Improve coding and software engineering prompts with AI</p>
         </div>
       </header>
 
@@ -77,7 +77,7 @@ function App() {
       </main>
 
       <footer className="app-footer">
-        <p>Built with React + Node.js | Powered by Grok AI</p>
+      <p>Built for coding and software engineering | Powered by AI</p>
       </footer>
     </div>
   )

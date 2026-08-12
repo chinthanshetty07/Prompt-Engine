@@ -16,8 +16,8 @@ const promptSchema = new mongoose.Schema(
     },
     domain: {
       type: String,
-      enum: ['fitness', 'finance', 'software_engineering', 'other'],
-      default: 'other'
+      enum: ['software_engineering'],
+      default: 'software_engineering'
     },
     detectedDomains: [{
       type: String,

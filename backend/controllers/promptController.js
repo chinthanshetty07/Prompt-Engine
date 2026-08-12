@@ -1,9 +1,10 @@
 import grokService from '../services/grokService.js'
 import dbService from '../services/dbService.js'
+import { CODING_DOMAIN, isCodingPrompt } from '../config/codingPrinciples.js'
 
 export const optimizePrompt = async (req, res, next) => {
   try {
-    const { prompt, domain } = req.body
+    const { prompt } = req.body
 
     if (!prompt || typeof prompt !== 'string') {
       return res.status(400).json({
@@ -26,12 +27,19 @@ export const optimizePrompt = async (req, res, next) => {
       })
     }
 
-    // Detect domain from prompt
+    if (!isCodingPrompt(prompt)) {
+      return res.status(422).json({
+        success: false,
+        error: 'Only coding, software engineering, and technical implementation prompts are supported.'
+      })
+    }
+
+    // The product is intentionally coding-only; every accepted prompt has one domain.
     const detectedDomains = await grokService.detectDomain(prompt)
-    const selectedDomain = domain || detectedDomains[0] || 'other'
+    const selectedDomain = CODING_DOMAIN
 
     // Optimize prompt using Grok
-    const grokResult = await grokService.optimizePrompt(prompt, selectedDomain)
+    const grokResult = await grokService.optimizePrompt(prompt)
 
     if (!grokResult.success) {
       return res.status(500).json({
@@ -46,7 +54,7 @@ export const optimizePrompt = async (req, res, next) => {
       optimizedPrompt: grokResult.optimizedPrompt,
       domain: selectedDomain,
       detectedDomains,
-      confidence: detectedDomains.length > 0 ? 0.8 : 0.5,
+      confidence: 1,
       tokens: {
         original: grokResult.tokensUsed.prompt_tokens || 0,
         optimized: grokResult.tokensUsed.completion_tokens || 0

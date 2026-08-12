@@ -7,14 +7,14 @@ export function InputColumn() {
   return (
     <div className="column input-column">
       <div className="column-header">
-        <h3>Your Prompt</h3>
+        <h3>Your Coding Prompt</h3>
         <span className="column-label">Input</span>
       </div>
       <textarea
         className="prompt-textarea"
         value={inputPrompt}
         onChange={(e) => setInputPrompt(e.target.value)}
-        placeholder="Type your prompt here or use the audio converter below..."
+        placeholder="Describe the coding task, bug, architecture, or technical implementation..."
         spellCheck="true"
       />
       <div className="textarea-footer">
