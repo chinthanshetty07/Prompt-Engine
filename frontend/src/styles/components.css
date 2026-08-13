@@ -128,11 +128,12 @@
 
 .output-content {
   flex: 1;
+  min-height: 0;
   padding: 1.25rem;
   overflow-y: auto;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -164,6 +165,7 @@
   display: flex;
   gap: 0.5rem;
   align-items: flex-start;
+  flex-shrink: 0;
 }
 
 .tiny-copy-button {
