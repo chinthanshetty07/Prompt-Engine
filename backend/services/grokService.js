@@ -3,18 +3,20 @@ import { CODING_DOMAIN, getCodingSystemPrompt } from '../config/codingPrinciples
 
 class GrokService {
   constructor() {
-    this.baseURL = process.env.GROK_API_BASE_URL || 'https://api.groq.com/openai/v1'
-    this.model = 'llama-3.3-70b-versatile'  // Latest available Groq model
+    this.baseURL = (process.env.GROQ_API_BASE_URL || 'https://api.groq.com/openai/v1').replace(/\/$/, '')
+    this.model = process.env.GROQ_MODEL || 'openai/gpt-oss-120b'
   }
 
   getApiKey() {
-    return process.env.GROK_API_KEY
+    // GROK_API_KEY is supported temporarily so existing deployments can
+    // migrate without an outage. New deployments should use GROQ_API_KEY.
+    return process.env.GROQ_API_KEY || process.env.GROK_API_KEY
   }
 
   async optimizePrompt(prompt) {
     const apiKey = this.getApiKey()
     if (!apiKey) {
-      console.warn('⚠️ GROK_API_KEY not set, returning mock response')
+      console.warn('⚠️ GROQ_API_KEY not set, returning mock response')
       return this.getMockResponse(prompt)
     }
 
@@ -37,7 +39,7 @@ class GrokService {
             }
           ],
           temperature: 0.7,
-          max_tokens: 1000,
+          max_completion_tokens: 1000,
           top_p: 1
         },
         {
@@ -59,7 +61,7 @@ class GrokService {
         model: this.model
       }
     } catch (error) {
-      console.error('Grok API Error:', error.message)
+      console.error('Groq API Error:', error.message)
       if (error.response) {
         console.error('Response status:', error.response.status)
         console.error('Response data:', error.response.data)

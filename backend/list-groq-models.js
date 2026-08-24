@@ -3,11 +3,11 @@ import axios from 'axios'
 
 dotenv.config()
 
-const apiKey = process.env.GROK_API_KEY
+const apiKey = process.env.GROQ_API_KEY || process.env.GROK_API_KEY
 const baseURL = 'https://api.groq.com/openai/v1'
 
 if (!apiKey) {
-  console.log('❌ GROK_API_KEY not set')
+  console.log('❌ GROQ_API_KEY not set')
   process.exit(1)
 }
 

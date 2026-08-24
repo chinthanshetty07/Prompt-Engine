@@ -24,17 +24,13 @@ const CODING_SIGNALS = [
   /\b(implement|build|create|design|develop|write)\b.*\b(code|api|app|software|service|feature|function|database|website)\b/i
 ]
 
-const NON_CODING_SIGNALS = [
-  /\b(workout|exercise|fitness|diet|nutrition|recipe|travel|vacation|relationship|dating)\b/i,
-  /\b(invest|investment|stock|portfolio|loan|mortgage|tax advice|financial advice)\b/i,
-  /\b(poem|poetry|song|lyrics|story|fiction|joke| horoscope|meditation)\b/i
-]
-
 export function isCodingPrompt(prompt) {
   const hasCodingSignal = CODING_SIGNALS.some((pattern) => pattern.test(prompt))
-  const hasNonCodingSignal = NON_CODING_SIGNALS.some((pattern) => pattern.test(prompt))
 
-  return hasCodingSignal && !hasNonCodingSignal
+  // The subject area is not a reliable indicator of whether a request is
+  // technical. For example, "build a fitness app using Rust" is a valid
+  // software-engineering prompt even though it mentions fitness.
+  return hasCodingSignal
 }
 
 export function getCodingSystemPrompt() {

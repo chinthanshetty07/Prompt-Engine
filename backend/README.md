@@ -49,7 +49,7 @@ backend/
 ├── routes/
 │   └── prompts.js          # API route definitions
 ├── services/
-│   ├── grokService.js      # Grok API integration
+│   ├── grokService.js      # Groq API integration
 │   └── dbService.js        # Database operations
 ├── server.js               # Express app initialization
 ├── package.json
@@ -182,9 +182,10 @@ NODE_ENV=development
 # Database
 MONGODB_URI=mongodb://localhost:27017/prompt-engine
 
-# Grok API (get key from https://grok.com)
-GROK_API_KEY=your_key_here
-GROK_API_BASE_URL=https://api.x.ai/v1
+# Groq API (get key from https://console.groq.com/keys)
+GROQ_API_KEY=your_key_here
+GROQ_API_BASE_URL=https://api.groq.com/openai/v1
+GROQ_MODEL=openai/gpt-oss-120b
 
 
 # Frontend URL for CORS
@@ -219,10 +220,10 @@ CORS_ORIGIN=http://localhost:3000
 ## 🛠️ Services
 
 ### GrokService
-Handles communication with Grok API for prompt optimization.
+Handles communication with Groq API for prompt optimization.
 
 **Features:**
-- Sends prompts to Grok AI
+- Sends prompts to Groq AI
 - Domain-specific system prompts
 - Domain detection from text
 - Mock responses when API key unavailable
@@ -284,14 +285,14 @@ See `../API.md` for detailed endpoint testing (coming soon)
 The frontend communicates with the backend via these endpoints:
 
 1. Frontend sends prompt → `POST /api/optimize`
-2. Backend calls Grok API
+2. Backend calls Groq API
 3. Backend saves to MongoDB
 4. Backend returns optimized prompt
 5. Frontend displays in OutputColumn
 
 ## 📊 Performance
 
-- **Prompt Optimization**: ~1-3 seconds (depends on Grok API)
+- **Prompt Optimization**: ~1-3 seconds (depends on Groq API)
 - **History Fetch**: ~100ms for 50 items
 - **Search**: ~150ms for index search
 - **Database**: MongoDB indexes on `createdAt` and `domain`
@@ -336,10 +337,10 @@ npm install
 - Verify connection string in `.env`
 - See ../MONGODB_SETUP.md for detailed help
 
-### Grok API Errors
-- Verify `GROK_API_KEY` is set in `.env`
+### Groq API Errors
+- Verify `GROQ_API_KEY` is set in `.env`
 - Backend uses mock responses if key is missing
-- Check Grok API status
+- Check Groq API status
 
 ### CORS Errors
 - Verify frontend URL in `CORS_ORIGIN`
