@@ -2,6 +2,8 @@
 
 A professional AI-powered coding prompt optimization engine that converts software engineering requests into optimized, AI-friendly prompts.
 
+**Live:** [promptengine.chinthanshetty.in](https://promptengine.chinthanshetty.in)
+
 ## ✨ Features
 
 - **Professional UI** - ChatGPT-like design with split-column layout
