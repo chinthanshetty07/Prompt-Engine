@@ -1,41 +1,48 @@
-// Use same-origin relative URLs so Vite's /api proxy works on localhost and on any dev port.
-const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
+// In development, leave this empty so Vite forwards /api to the local backend.
+// In production, set VITE_API_URL to the deployed backend origin.
+const API_URL = (import.meta.env.VITE_API_URL || '').trim().replace(/\\/$/, '')
 
-export const optimizePrompt = async (prompt) => {
+async function readApiResponse(response) {
+  const raw = await response.text()
+  let data
+
   try {
-    const response = await fetch(`${API_URL}/api/optimize`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ prompt })
-    })
-    const data = await response.json()
-    if (!response.ok) throw new Error(data.error || 'Failed to optimize prompt')
-    return data
-  } catch (err) {
-    throw new Error(err.message || 'API Error')
+    data = raw ? JSON.parse(raw) : {}
+  } catch {
+    const preview = raw.replace(/\\s+/g, ' ').trim().slice(0, 180)
+    const location = response.url || 'the configured API URL'
+    throw new Error(
+      `The API returned a non-JSON response (HTTP ${response.status}) from ${location}. ` +
+      `Check VITE_API_URL and make sure it points to the Prompt Engine backend, not the frontend website. ` +
+      (preview ? `Response: "${preview}"` : 'The response body was empty.')
+    )
   }
+
+  if (!response.ok) {
+    throw new Error(data.error || data.message || `API request failed (HTTP ${response.status})`)
+  }
+
+  return data
 }
 
-export const getHistory = async () => {
+async function request(path, options = {}) {
+  let response
   try {
-    const response = await fetch(`${API_URL}/api/history`)
-    if (!response.ok) throw new Error('Failed to fetch history')
-    return await response.json()
-  } catch (err) {
-    throw new Error(err.message || 'API Error')
+    response = await fetch(`${API_URL}${path}`, options)
+  } catch (error) {
+    throw new Error(`Cannot reach the Prompt Engine API at ${API_URL || 'the local Vite /api proxy'}. Make sure the backend is running. ${error.message}`)
   }
+  return readApiResponse(response)
 }
 
-export const deleteHistoryItem = async (id) => {
-  try {
-    const response = await fetch(`${API_URL}/api/history/${id}`, {
-      method: 'DELETE'
-    })
-    if (!response.ok) throw new Error('Failed to delete item')
-    return await response.json()
-  } catch (err) {
-    throw new Error(err.message || 'API Error')
-  }
-}
+export const optimizePrompt = async (prompt) => request('/api/optimize', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ prompt })
+})
+
+export const getHistory = async () => request('/api/history')
+
+export const deleteHistoryItem = async (id) => request(`/api/history/${encodeURIComponent(id)}`, {
+  method: 'DELETE'
+})
