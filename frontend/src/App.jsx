@@ -12,6 +12,7 @@ function App() {
     setOptimizedPrompt,
     setLoading,
     setError,
+    setIsMockResponse,
     history,
     setHistory
   } = usePrompt()
@@ -38,10 +39,12 @@ function App() {
     setLoading(true)
     setError(null)
     setOptimizedPrompt('')
+    setIsMockResponse(false)
 
     try {
       const result = await optimizePrompt(inputPrompt)
       setOptimizedPrompt(result.optimizedPrompt)
+      setIsMockResponse(Boolean(result.isMockResponse))
     } catch (err) {
       setError(err.message)
     } finally {
