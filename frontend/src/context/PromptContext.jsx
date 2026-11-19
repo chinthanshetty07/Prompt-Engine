@@ -7,6 +7,7 @@ export function PromptProvider({ children }) {
   const [optimizedPrompt, setOptimizedPrompt] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [isMockResponse, setIsMockResponse] = useState(false)
   const [history, setHistory] = useState([])
   const value = {
     inputPrompt,
@@ -17,6 +18,8 @@ export function PromptProvider({ children }) {
     setLoading,
     error,
     setError,
+    isMockResponse,
+    setIsMockResponse,
     history,
     setHistory
   }
