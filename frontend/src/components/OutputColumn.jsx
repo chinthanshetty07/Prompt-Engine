@@ -3,7 +3,7 @@ import { usePrompt } from '../context/PromptContext'
 import '../styles/components.css'
 
 export function OutputColumn() {
-  const { optimizedPrompt, loading, error } = usePrompt()
+  const { optimizedPrompt, loading, error, isMockResponse } = usePrompt()
   const [copied, setCopied] = useState(false)
 
   const handleCopy = () => {
@@ -20,6 +20,12 @@ export function OutputColumn() {
       </div>
 
       <div className="output-content">
+        {isMockResponse && !loading && (
+          <div className="error" role="status">
+            <p>Demo output: no Groq API key is configured. Add GROQ_API_KEY to backend/.env to enable real AI optimization.</p>
+          </div>
+        )}
+
         {loading && (
           <div className="loading">
             <div className="spinner"></div>
