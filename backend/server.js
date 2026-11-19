@@ -59,8 +59,13 @@ app.use(errorHandler)
 // Start server
 const startServer = async () => {
   try {
-    // Connect to MongoDB
-    await connectDB()
+    // MongoDB is used for optional prompt history. Do not prevent the AI API
+    // from starting when a local MongoDB instance is not configured or reachable.
+    try {
+      await connectDB()
+    } catch (error) {
+      console.warn('⚠️ MongoDB unavailable; optimization can run, but history will be disabled:', error.message)
+    }
 
     app.listen(PORT, () => {
       console.log(`
