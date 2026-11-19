@@ -1,4 +1,5 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001'
+// Use same-origin relative URLs so Vite's /api proxy works on localhost and on any dev port.
+const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
 
 export const optimizePrompt = async (prompt) => {
   try {
