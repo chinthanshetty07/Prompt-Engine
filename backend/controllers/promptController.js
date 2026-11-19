@@ -48,34 +48,45 @@ export const optimizePrompt = async (req, res, next) => {
       })
     }
 
-    // Save to database
-    const savedPrompt = await dbService.createPrompt({
-      originalPrompt: prompt,
-      optimizedPrompt: grokResult.optimizedPrompt,
-      domain: selectedDomain,
-      detectedDomains,
-      confidence: 1,
-      tokens: {
-        original: grokResult.tokensUsed.prompt_tokens || 0,
-        optimized: grokResult.tokensUsed.completion_tokens || 0
-      },
-      metadata: {
-        userAgent: req.headers['user-agent'],
-        ipAddress: req.ip,
-        language: req.headers['accept-language']?.split(',')[0] || 'en'
-      }
-    })
+    // History is optional: a MongoDB outage must not turn a valid AI
+    // optimization into an HTTP 500 response.
+    let savedPrompt = null
+    try {
+      savedPrompt = await dbService.createPrompt({
+        originalPrompt: prompt,
+        optimizedPrompt: grokResult.optimizedPrompt,
+        domain: selectedDomain,
+        detectedDomains,
+        confidence: 1,
+        tokens: {
+          original: grokResult.tokensUsed?.prompt_tokens || 0,
+          optimized: grokResult.tokensUsed?.completion_tokens || 0
+        },
+        metadata: {
+          userAgent: req.headers['user-agent'],
+          ipAddress: req.ip,
+          language: req.headers['accept-language']?.split(',')[0] || 'en'
+        }
+      })
+    } catch (dbError) {
+      console.warn('⚠️ Optimization succeeded, but prompt history could not be saved:', dbError.message)
+    }
 
     res.status(200).json({
       success: true,
-      _id: savedPrompt._id,
-      originalPrompt: savedPrompt.originalPrompt,
-      optimizedPrompt: savedPrompt.optimizedPrompt,
-      domain: savedPrompt.domain,
-      detectedDomains: savedPrompt.detectedDomains,
-      tokens: savedPrompt.tokens,
-      createdAt: savedPrompt.createdAt,
-      isMockResponse: grokResult.isMockResponse || false
+      _id: savedPrompt?._id || null,
+      originalPrompt: savedPrompt?.originalPrompt || prompt,
+      optimizedPrompt: grokResult.optimizedPrompt,
+      domain: selectedDomain,
+      detectedDomains,
+      tokens: savedPrompt?.tokens || {
+        original: grokResult.tokensUsed?.prompt_tokens || 0,
+        optimized: grokResult.tokensUsed?.completion_tokens || 0
+      },
+      createdAt: savedPrompt?.createdAt || new Date().toISOString(),
+      historySaved: Boolean(savedPrompt),
+      isMockResponse: grokResult.isMockResponse || false,
+      model: grokResult.model
     })
   } catch (error) {
     next(error)
