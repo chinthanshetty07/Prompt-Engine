@@ -1,0 +1,3 @@
+export default function handler(req, res) {
+  res.status(200).json({ success: true, message: 'Server is running', env: 'vercel', timestamp: new Date().toISOString() })
+}

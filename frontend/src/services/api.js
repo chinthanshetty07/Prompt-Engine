@@ -1,6 +1,16 @@
 // Use same-origin relative URLs so Vite's /api proxy works on localhost and on any dev port.
 const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
 
+// Read a JSON reply, and say something useful if the server sent a page instead.
+const readJson = async (response) => {
+  const text = await response.text()
+  try {
+    return JSON.parse(text)
+  } catch {
+    throw new Error(`The server is not reachable right now (HTTP ${response.status}). Please try again later.`)
+  }
+}
+
 export const optimizePrompt = async (prompt) => {
   try {
     const response = await fetch(`${API_URL}/api/optimize`, {
@@ -10,7 +20,7 @@ export const optimizePrompt = async (prompt) => {
       },
       body: JSON.stringify({ prompt })
     })
-    const data = await response.json()
+    const data = await readJson(response)
     if (!response.ok) throw new Error(data.error || 'Failed to optimize prompt')
     return data
   } catch (err) {
