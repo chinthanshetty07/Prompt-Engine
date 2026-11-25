@@ -69,7 +69,7 @@ prompt-engine/
 2. **Create environment file**
    ```bash
    cp .env.example .env
-   # Edit .env if needed (defaults to http://localhost:5000)
+   # Edit .env if needed (defaults to http://localhost:5050)
    ```
 
 3. **Start development server**
@@ -112,12 +112,12 @@ DELETE /api/history/:id
 
 ### Frontend (.env)
 ```
-REACT_APP_API_URL=http://localhost:5000
+VITE_API_URL=   # leave empty to use the Vite /api proxy
 ```
 
 ### Backend (.env) - Coming Soon
 ```
-PORT=5000
+PORT=5050
 MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/prompt-engine
 GROK_API_KEY=your_grok_api_key
 NODE_ENV=development

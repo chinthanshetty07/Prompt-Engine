@@ -10,7 +10,10 @@ class GrokService {
   getApiKey() {
     // GROK_API_KEY is supported temporarily so existing deployments can
     // migrate without an outage. New deployments should use GROQ_API_KEY.
-    return process.env.GROQ_API_KEY || process.env.GROK_API_KEY
+    const key = (process.env.GROQ_API_KEY || process.env.GROK_API_KEY || '').trim()
+    // The .env.example placeholder is not a key; fall back to demo mode.
+    if (!key || /^your_.*_here$/.test(key)) return null
+    return key
   }
 
   async optimizePrompt(prompt) {
@@ -39,7 +42,7 @@ class GrokService {
             }
           ],
           temperature: 0.7,
-          max_completion_tokens: 1000,
+          max_completion_tokens: 4000,
           top_p: 1
         },
         {
@@ -51,7 +54,10 @@ class GrokService {
         }
       )
 
-      const optimizedPrompt = response.data.choices[0].message.content.trim()
+      const optimizedPrompt = (response.data.choices?.[0]?.message?.content || '').trim()
+      if (!optimizedPrompt) {
+        throw new Error('the AI model returned an empty response')
+      }
       const tokensUsed = response.data.usage
 
       return {
@@ -66,7 +72,10 @@ class GrokService {
         console.error('Response status:', error.response.status)
         console.error('Response data:', error.response.data)
       }
-      throw new Error(`Failed to optimize prompt: ${error.message}`)
+      const reason = error.response?.status === 401
+        ? 'the Groq API key was rejected (check GROQ_API_KEY in backend/.env)'
+        : error.message
+      throw new Error(`Failed to optimize prompt: ${reason}`)
     }
   }
 

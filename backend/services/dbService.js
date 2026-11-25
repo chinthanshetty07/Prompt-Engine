@@ -50,6 +50,7 @@ class DatabaseService {
       }
       return prompt
     } catch (error) {
+      if (error.name === 'CastError') throw error
       throw new Error(`Failed to fetch prompt: ${error.message}`)
     }
   }
@@ -62,6 +63,7 @@ class DatabaseService {
       }
       return result
     } catch (error) {
+      if (error.name === 'CastError') throw error
       throw new Error(`Failed to delete prompt: ${error.message}`)
     }
   }
@@ -87,6 +89,7 @@ class DatabaseService {
 
   async searchPrompts(query, limit = 50) {
     try {
+      query = String(query).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
       const prompts = await Prompt.find({
         $or: [
           { originalPrompt: { $regex: query, $options: 'i' } },
