@@ -32,7 +32,7 @@ Professional Node.js + Express backend for the Prompt Engine application. Handle
    npm run dev
    ```
 
-   Server will start on `http://localhost:5000`
+   Server will start on `http://localhost:5050`
 
 ## 📋 Project Structure
 
@@ -176,7 +176,7 @@ Response:
 
 ```bash
 # Server
-PORT=5000
+PORT=5050
 NODE_ENV=development
 
 # Database
@@ -262,18 +262,18 @@ Using curl:
 
 ```bash
 # Test health
-curl http://localhost:5000/api/health
+curl http://localhost:5050/api/health
 
 # Optimize a prompt
-curl -X POST http://localhost:5000/api/optimize \
+curl -X POST http://localhost:5050/api/optimize \
   -H "Content-Type: application/json" \
   -d '{"prompt": "Create a workout plan for beginners", "domain": "fitness"}'
 
 # Get history
-curl http://localhost:5000/api/history
+curl http://localhost:5050/api/history
 
 # Search
-curl "http://localhost:5000/api/search?q=fitness"
+curl "http://localhost:5050/api/search?q=fitness"
 ```
 
 Using VS Code REST Client or Postman:

@@ -18,6 +18,10 @@ export const errorHandler = (err, req, res, next) => {
     })
   }
 
+  if (/Prompt not found/.test(err.message)) {
+    return res.status(404).json({ success: false, error: 'Prompt not found' })
+  }
+
   // Generic error
   res.status(err.statusCode || 500).json({
     success: false,

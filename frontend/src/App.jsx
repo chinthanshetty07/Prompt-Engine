@@ -10,6 +10,7 @@ function App() {
   const {
     inputPrompt,
     setOptimizedPrompt,
+    loading,
     setLoading,
     setError,
     setIsMockResponse,
@@ -71,8 +72,9 @@ function App() {
           <button
             className="optimize-button"
             onClick={handleOptimize}
+            disabled={loading}
           >
-            Optimize Prompt
+            {loading ? 'Optimizing...' : 'Optimize Prompt'}
           </button>
         </div>
       </main>

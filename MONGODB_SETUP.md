@@ -64,7 +64,7 @@ cd backend
 npm run dev
 
 # Terminal 3: Test API
-curl http://localhost:5000/api/health
+curl http://localhost:5050/api/health
 ```
 
 Expected response:
@@ -161,4 +161,4 @@ cd backend
 npm run dev
 ```
 
-The backend will start on `http://localhost:5000`
+The backend will start on `http://localhost:5050`

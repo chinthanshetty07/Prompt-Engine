@@ -1,14 +1,15 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import { connectDB } from './config/database.js'
+import mongoose from 'mongoose'
+import { connectDB, disconnectDB } from './config/database.js'
 import { errorHandler, notFound } from './middleware/errorHandler.js'
 import promptRoutes from './routes/prompts.js'
 
 dotenv.config()
 
 const app = express()
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5050
 const NODE_ENV = process.env.NODE_ENV || 'development'
 
 // Middleware
@@ -67,17 +68,25 @@ const startServer = async () => {
       console.warn('⚠️ MongoDB unavailable; optimization can run, but history will be disabled:', error.message)
     }
 
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
       console.log(`
 ╔════════════════════════════════════════╗
 ║   Prompt Engine Backend Server        ║
 ╠════════════════════════════════════════╣
 ║ Server: http://localhost:${PORT}
 ║ Environment: ${NODE_ENV}
-║ Database: Connected
+║ Database: ${mongoose.connection.readyState === 1 ? 'Connected' : 'Unavailable (history disabled)'}
 ║ Status: Ready ✅
 ╚════════════════════════════════════════╝
       `)
+    })
+    server.on('error', (error) => {
+      if (error.code === 'EADDRINUSE') {
+        console.error(`Port ${PORT} is already in use. Set PORT in backend/.env to a free port (on macOS, AirPlay Receiver uses 5000).`)
+      } else {
+        console.error('Server error:', error.message)
+      }
+      process.exit(1)
     })
   } catch (error) {
     console.error('Failed to start server:', error.message)
@@ -90,13 +99,13 @@ startServer()
 // Graceful shutdown
 process.on('SIGTERM', async () => {
   console.log('\n🛑 SIGTERM received, shutting down gracefully')
-  await connectDB().then(conn => conn.disconnect())
+  await disconnectDB()
   process.exit(0)
 })
 
 process.on('SIGINT', async () => {
   console.log('\n🛑 SIGINT received, shutting down gracefully')
-  await connectDB().then(conn => conn.disconnect())
+  await disconnectDB()
   process.exit(0)
 })
 
